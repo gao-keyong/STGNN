@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 #                     help = 'a time step is 5 mins')
 parser.add_argument('--P', type = int, default = 12,
                     help = 'history steps')
-parser.add_argument('--Q', type = int, default = 12,
+parser.add_argument('--Q', type = int, default = 1,
                     help = 'prediction steps')
 parser.add_argument('--L', type = int, default = 1,
                     help = 'number of STAtt Blocks')
@@ -38,7 +38,7 @@ parser.add_argument('--max_epoch', type = int, default = 50,
 #                     help = 'patience for early stop')
 parser.add_argument('--learning_rate', type=float, default = 0.001,
                     help = 'initial learning rate')
-parser.add_argument('--traffic_file', default = '**.npz',
+parser.add_argument('--traffic_file', default = 'pems-bay.h5',
                     help = 'traffic file')
 parser.add_argument('--SE_file', default = '**.npy',
                     help = 'spatial emebdding file')
@@ -51,12 +51,12 @@ args = parser.parse_args()
 
 log = open(args.log_file, 'w')
 
-device = torch.device("cuda:5" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 log_string(log, "loading data....")
 
 trainX, trainTE, trainY, valX, valTE, valY, testX, testTE, testY, SE, mean, std = loadPEMSData(args)
-SE = torch.from_numpy(SE).to(device)
+# SE = torch.from_numpy(SE).to(device)
 
 
 log_string(log, "loading end....")
@@ -92,7 +92,7 @@ def res(model, valX, valTE, valY, mean, std):
     mapes = []
     wapes = []
 
-    for i in range(12):
+    for i in range(args.Q):
         mae, rmse , mape, wape = metric(pred[:,i,:], label[:,i,:])
         maes.append(mae)
         rmses.append(rmse)
@@ -226,7 +226,7 @@ if __name__ == '__main__':
     maes = np.stack(maes, 1)
     rmses = np.stack(rmses, 1)
     mapes = np.stack(mapes, 1)
-    for i in range(12):
+    for i in range(args.Q):
         log_string(log, 'step %d, mae %.4f, rmse %.4f, mape %.4f' % (i+1, maes[i].mean(), rmses[i].mean(), mapes[i].mean()))
         log_string(log, 'step %d, mae %.4f, rmse %.4f, mape %.4f' % (i+1, maes[i].std(), rmses[i].std(), mapes[i].std()))
     log_string(log, 'average, mae %.4f, rmse %.4f, mape %.4f' % (maes[-1].mean(), rmses[-1].mean(), mapes[-1].mean()))

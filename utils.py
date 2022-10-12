@@ -91,7 +91,8 @@ def loadData(args):
 
 def loadPEMSData(args):
     # Traffic
-    Traffic = np.squeeze(np.load(args.traffic_file)['data'], -1)
+#   Traffic = np.squeeze(np.load(args.traffic_file)['data'], -1)
+    Traffic= pd.read_hdf(args.traffic_file)
     # Traffic = load_partition(args, Traffic)
     print(Traffic.shape)
     # train/val/test 
@@ -116,7 +117,8 @@ def loadPEMSData(args):
     testX = (testX - mean) / std
 
     # spatial embedding 
-    SE = np.load(args.SE_file).astype(np.float32)
+#     SE = np.load(args.SE_file).astype(np.float32)
+    SE=None
     # paddingSE = [[0 for i in range(1)] for i in range(SE.shape[1])]
     # paddingSE = np.stack(paddingSE, -1)
     # SE = np.concatenate([SE,paddingSE], 0).astype(np.float32)

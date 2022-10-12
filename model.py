@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from torch.autograd import Variable
 import math
-device = torch.device("cuda:5" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 
 class Transform(nn.Module):
@@ -155,3 +155,4 @@ class STGNN(nn.Module):
         x = self.end_emb(x)
 
         return x.squeeze(-1)
+#         return F.sigmoid(x.squeeze(-1))        
