@@ -1,0 +1,32 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: train",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/train.py",
+      "args": [
+        "--P",
+        "12",
+        "--Q",
+        "1",
+        "--traffic_file",
+        "./dataset/area_flow_per_hour",
+        "--model_file",
+        "./dataset/PEMS-AP",
+        "--train_ratio",
+        "0.8",
+        "--val_ratio",
+        "0.2",
+        "--test_ratio",
+        "0"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
